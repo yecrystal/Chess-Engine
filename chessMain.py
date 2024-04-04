@@ -3,7 +3,7 @@ This is the main driver file. It will be responsible for handling user input and
 '''
 
 import pygame as p
-from chessEngine import GameState
+from chessEngine import GameState, Move
 
 WIDTH = HEIGHT = 512
 DIMENSION = 8 # Dimensions of a chess board are 8x8
@@ -48,8 +48,11 @@ def main():
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected) # Append for both 1st and 2nd clicks
                 if len(playerClicks) == 2: # After 2nd click
-                    
-
+                    move = Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(move.getChessNotiation())
+                    gs.makeMove(move)
+                    sqSelected = () # Reset user clicks
+                    playerClicks = []
         drawGameState(screen, gs.board)  # Pass gs.board instead of gs to the drawGameState function
         clock.tick(MAX_FPS)
         p.display.flip()
