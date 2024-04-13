@@ -57,8 +57,10 @@ def main():
                     if move in validMoves:
                         gs.makeMove(move)
                         moveMade = True
-                    sqSelected = () # Reset user clicks
-                    playerClicks = []
+                        sqSelected = () # Reset user clicks
+                        playerClicks = []
+                    else:
+                        playerClicks = [sqSelected]
 
             # Key handlers
             elif e.type == p.KEYDOWN:
@@ -69,7 +71,7 @@ def main():
         if moveMade:
             validMoves = gs.getValidMoves()
             moveMade = False
-            
+
         drawGameState(screen, gs.board)  # Pass gs.board instead of gs to the drawGameState function
         clock.tick(MAX_FPS)
         p.display.flip()
