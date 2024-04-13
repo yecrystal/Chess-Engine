@@ -121,7 +121,7 @@ class GameState():
         allyColour = "w" if self.whiteToMove else "b"
         for m in knightMoves:
             endRow = r + m[0]
-            endCol = r + m[1]
+            endCol = c + m[1]
             if 0 <= endRow < 8 and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
                 if endPiece[0] != allyColour: # Not an ally piece (empty or enemy piece)
@@ -162,10 +162,10 @@ class GameState():
     def getKingMoves(self, r, c, moves):
         kingMoves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
         allyColour = "w" if self.whiteToMove else "b"
-        for i in range(8):
-            endRow = r + kingMoves[1][0]
-            endCol = r + kingMoves [1][1]
-            if 0 <- endRow < 8 and 0 <= endCol < 8:
+        for m in kingMoves:
+            endRow = r + m[0]
+            endCol = c + m[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
                 if endPiece[0] != allyColour: # Not an ally piece (empty or enemy piece)
                     moves.append(Move((r, c), (endRow, endCol), self.board))
