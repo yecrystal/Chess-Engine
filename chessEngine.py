@@ -83,6 +83,14 @@ class GameState():
                 if pieceChecking[1] == 'N':
                     validSquares = [(checkRow, checkCol)]
                 else:
+                    for i in range(1, 8):
+                        validSquare = (kingRow + check[2] * i, kingCol + check[3] * i) # Check[2] and check[3] are the check directions
+                        validSquares.append(validSquare)
+                        if validSquare[0] == checkRow and validSquare[1] == checkCol: # Once you get to piece and checks
+                            break
+                # Get rid of any moves that don't block check or move king
+                for i in range(len(moves) - 1, -1, -1): # go through backwards when you are removing from a list as iterating
+                    if moves[i].pieceMoved[1] != 'K': # Move doesn't move king so it must block or capture
 
     '''
     Determine if the current player is in check
