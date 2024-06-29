@@ -53,7 +53,7 @@ def main():
                     playerClicks.append(sqSelected) # Append for both 1st and 2nd clicks
                 if len(playerClicks) == 2: # After 2nd click
                     move = Move(playerClicks[0], playerClicks[1], gs.board)
-                    print(move.getChessNotiation())
+                    print(move.getChessNotation())
                     for i in range(len(validMoves)):
                         if move == validMoves[i]:
                             gs.makeMove(validMoves[i])
