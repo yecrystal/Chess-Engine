@@ -37,7 +37,7 @@ class GameState():
         self.whiteToMove = not self.whiteToMove # Swap players
         # Update the king's location if moved
         if move.pieceMoved == "wK":
-            self.whiteKingLocation = (move.endRow, move.e ndCol)
+            self.whiteKingLocation = (move.endRow, move.endCol)
         elif move.pieceMoved == "bK":
             self.blackKingLocation = (move.endRow, move.endCol)
 
@@ -146,6 +146,10 @@ class GameState():
             if c + 1 <= 7: # Caoture to right 
                 if self.board[r + 1][c + 1][0] == 'w':
                     moves.append(Move((r, c), (r + 1, c + 1), self.board))
+        
+        # Pawn Promotion
+        if Move.isPawnPromotion:
+            self.board[Move.endRow][Move.endCol] = Move.pieceMoved[0] + 'Q'
 
     '''
     Get all the rook moves for the pawn located at row, col and add these moves to the list
@@ -216,7 +220,7 @@ class GameState():
     Get all the king moves for the pawn located at row, col and add these moves to the list
     '''
     def getKingMoves(self, r, c, moves):
-        kingMoves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, ))
+        kingMoves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
         allyColour = "w" if self.whiteToMove else "b"
         for i in range(8):
             endRow = r + kingMoves[i][0]
@@ -246,7 +250,6 @@ class Move():
         self.isPawnPromotion = False
         if (self.pieceMoved == 'wp' and self.endRow == 0) or (self.pieceMoved == 'bP' and self.endRow == 7):
             self.isPawnPromotion
-        
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
              
     ''' 
