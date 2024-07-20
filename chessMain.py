@@ -43,8 +43,8 @@ def main():
             # Mouse handler
             elif e.type == p.MOUSEBUTTONDOWN: 
                 location = p.mouse.get_pos() # Get (x, y) location of mouse
-                col = location[0]//SQ_SIZE
-                row = location[1]//SQ_SIZE
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
                 if sqSelected == (row, col): # The user clicked the same square twice
                     sqSelected = () # Deselect
                     playerClicks = [] # Clear player clicks
@@ -73,15 +73,35 @@ def main():
             validMoves = gs.getValidMoves()
             moveMade = False
 
-        drawGameState(screen, gs.board)  # Pass gs.board instead of gs to the drawGameState function
+        drawGameState(screen, gs, validMoves, sqSelected)  # Pass gs.board instead of gs to the drawGameState function
         clock.tick(MAX_FPS)
         p.display.flip()
+
+'''
+Highlight the square selected and moves for piece selected
+'''
+def highlightSquares(screen, gs, validMoves, sqSelected):
+    if sqSelected != ():
+        r, c = sqSelected
+        if gs.board[r][c][0] == ('w' if gs.whiteToMove else 'b'): # sqSelected is a piece that can be moved
+            # Highlight selected square
+            s = p.Surface((SQ_SIZE, SQ_SIZE))
+            s.set_alpha(100) # Transparency value -> 0 transparent; 255 opaque
+            s.fill(p.Color('blue'))
+            screen.blit(s, (c * SQ_SIZE, r * SQ_SIZE))
+            # Highlight moves from that square
+            s.fill(p.Color('yellow'))
+            for move in validMoves:
+                if move.startRow == r and move.startCol == c:
+                    screen.blit(s, (move.endCol * SQ_SIZE, move.endRow * SQ_SIZE))
+
 '''
 Responsible for all graphics within the current game state. Top left square is always light.
 '''
-def drawGameState(screen, board):
+def drawGameState(screen, gs, validMoves, sqSelected):
     drawBoard(screen) # Draw the squares on the board
-    drawPieces(screen, board) # Draw pieces on top of the squares
+    drawPieces(screen, gs.board) # Draw pieces on top of the squares
+    highlightSquares(screen, gs, validMoves, sqSelected)
 
 '''
 Draw the squares on the board
@@ -102,6 +122,13 @@ def drawPieces(screen, board):
             piece = board[r][c]
             if piece != "--": # Not empty square
                 screen.blit(IMAGES[piece], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+'''
+Animating a move
+'''
+def animateMove(move, screen, board, clock):
+    global colours
+    coords = [] # List of coords that the animation will move through
 
 if __name__ == "__main__":
     main()
