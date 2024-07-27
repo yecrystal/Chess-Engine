@@ -12,12 +12,14 @@ class GameState:
         ]
         self.moveFunctions = {
             'P': self.getPawnMoves, 'R': self.getRookMoves, 'N': self.getKnightMoves,
-            'B': self.getBishopMoves, 'Q': self.getQueenMoves, 'K': self.getKingMoves
-        }
-        self.whiteToMove = True
+            'B': self.getBishopMoves, 'Q': self.getQueenMoves, 'K': self.getKingMoves}
         self.moveLog = []
+        self.whiteToMove = True
         self.whiteKingLocation = (7, 4)
         self.blackKingLocation = (0, 4)
+        self.inCheck = False
+        self.pins = []
+        self.checks = []
         self.checkMate = False
         self.staleMate = False
         self.enpassantPossible = () # Coordinates for the square where en passant capture is possible
@@ -35,18 +37,14 @@ class GameState:
             self.whiteKingLocation = (move.endRow, move.endCol)
         elif move.pieceMoved == "bK":
             self.blackKingLocation = (move.endRow, move.endCol)
-
-        if move.isPawnPromotion:
-            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + 'Q'
-
-        if move.isEnpassantMove:
-            self.board[move.startRow][move.endCol] = '--'  # Capturing the pawn
-
         if move.pieceMoved[1] == 'P' and abs(move.startRow - move.endRow) == 2:
             self.enpassantPossible = ((move.startRow + move.endRow) // 2, move.startCol)
         else:
             self.enpassantPossible = ()
-
+        if move.isEnpassantMove:
+            self.board[move.startRow][move.endCol] = '--'  # Capturing the pawn
+        if move.isPawnPromotion:
+            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + 'Q'
         if move.isCastleMove:
             if move.endCol - move.startCol == 2:  # Kingside castle move
                 self.board[move.endRow][move.endCol-1] = self.board[move.endRow][move.endCol+1]  # Moves the rook

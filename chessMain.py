@@ -12,18 +12,12 @@ SQ_SIZE = HEIGHT // DIMENSION
 MAX_FPS = 15 # For animations
 IMAGES = {}  # Initialize IMAGES as a dictionary
 
-'''
-Initialize a global dictionary of images. this will be called exactly once in the main.
-'''
 def loadImages():
     pieces = ['wP', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bP', 'bR', 'bN', 'bB', 'bK', 'bQ' ]
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
     # Can access an image by saying 'IMAGES['wp']'
     
-'''
-The main driver for the code. This will handle user input and updating the graphics.
-'''
 def main():
     p.init()
     screen = p.display.set_mode((WIDTH, HEIGHT))
@@ -39,7 +33,7 @@ def main():
     playerClicks = [] # Keep track of the player clicks (two tuples: [(6, 4), (4, 4)])
     gameOver = False
     playerOne = True # Human playing white then true. If AI playing, then False
-    playerTwo = False # Same as above but for black
+    playerTwo = True # Same as above but for black
     while running:
         humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
         for e in p.event.get():
@@ -116,9 +110,6 @@ def main():
         clock.tick(MAX_FPS)
         p.display.flip()
 
-'''
-Highlight the square selected and moves for piece selected
-'''
 def highlightSquares(screen, gs, validMoves, sqSelected):
     if sqSelected != ():
         r, c = sqSelected
@@ -134,17 +125,11 @@ def highlightSquares(screen, gs, validMoves, sqSelected):
                 if move.startRow == r and move.startCol == c:
                     screen.blit(s, (move.endCol * SQ_SIZE, move.endRow * SQ_SIZE))
 
-'''
-Responsible for all graphics within the current game state. Top left square is always light.
-'''
 def drawGameState(screen, gs, validMoves, sqSelected):
     drawBoard(screen) # Draw the squares on the board
     drawPieces(screen, gs.board) # Draw pieces on top of the squares
     highlightSquares(screen, gs, validMoves, sqSelected)
 
-'''
-Draw the squares on the board
-'''
 def drawBoard(screen):
     colours = [p.Color("white"), p.Color("pink")]
     for r in range(DIMENSION):
@@ -152,9 +137,6 @@ def drawBoard(screen):
             colour = colours[((r+c)%2)]
             p.draw.rect(screen, colour, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
-'''
-Draw the pieces on the board using the current GameState.board
-'''
 def drawPieces(screen, board):
     for r in range(DIMENSION):
         for c in range(DIMENSION):
@@ -162,9 +144,6 @@ def drawPieces(screen, board):
             if piece != "--": # Not empty square
                 screen.blit(IMAGES[piece], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
-'''
-Animating a move
-'''
 def animateMove(move, screen, board, clock):
     global colours
     coords = [] # List of coords that the animation will move through

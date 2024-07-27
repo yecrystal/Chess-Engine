@@ -5,15 +5,9 @@ CHECKMATE = 1000
 STALEMATE  = 0
 DEPTH = 3
 
-'''
-Picks and returns a random move
-'''
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves)-1)]
 
-'''
-Find the best move, min max without recursion
-'''
 def findBestMoveMinMaxNoRecursion(gs, validMoves):
     turnMultiplier = 1 if gs.whiteToMove else -1
     opponentMinMaxScore = CHECKMATE
@@ -36,7 +30,7 @@ def findBestMoveMinMaxNoRecursion(gs, validMoves):
                 elif gs.stalemate:
                     score = STALEMATE
                 else:
-                    score = -turnMultiplier * scoreMaterial(gs.board)
+                    score = -turnMultiplier * scoreBoard(gs.board)
                 if score > opponentMaxScore:
                     opponentMaxScore = score
                 gs.undoMove()
@@ -127,9 +121,6 @@ def findMoveNegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplier)
             break
     return maxScore
 
-'''
-Score the board based on material
-'''
 def scoreBoard(gs):
     if gs.checkmate:
         if gs.whiteToMove:
