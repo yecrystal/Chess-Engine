@@ -120,12 +120,12 @@ class GameState:
         for i in range(len(moves) - 1, -1, -1):
             self.makeMove(moves[i])
             self.whiteToMove = not self.whiteToMove
-            if self.inCheck():
+            if self.isInCheck():  # Updated method call
                 moves.remove(moves[i])
             self.whiteToMove = not self.whiteToMove
             self.undoMove()
         if len(moves) == 0:
-            if self.inCheck():
+            if self.isInCheck():  # Updated method call
                 self.checkMate = True
             else:
                 self.staleMate = True
@@ -133,7 +133,7 @@ class GameState:
         self.currentCastlingRight = tempCastleRights
         return moves
 
-    def inCheck(self):
+    def isInCheck(self):  # Renamed method
         if self.whiteToMove:
             return self.squareUnderAttack(self.whiteKingLocation[0], self.whiteKingLocation[1])
         else:
